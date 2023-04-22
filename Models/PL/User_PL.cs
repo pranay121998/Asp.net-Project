@@ -15,5 +15,6 @@ namespace EmployeeWorkBook.Models.PL
 
         public string Dob { get; set; }
         public string EmpPass { get; set; }
+        public int EmpId { get; set; }
     }
 }

@@ -26,8 +26,10 @@ namespace EmployeeWorkBook.Models.DL
                 {
                     //SqlCommand cmd = new SqlCommand("insert into EmpData(FirstName,LastName,Email,Gender,Dob,EmpPass,PhoneNo) values " +
                     //    "('"+userData.FirstName+"','"+userData.LastName+"','"+userData.Email+"','"+userData.Gender+"','"+userData.Dob+"','"+userData.EmpPass+"','"+userData.PhoneNo+"')", con);
-                    SqlCommand cmd = new SqlCommand("SaveUser", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
+                    SqlCommand cmd = new SqlCommand("SaveUser", con)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
                     cmd.Parameters.AddWithValue("@Ind",1);
                     cmd.Parameters.AddWithValue("@FName", userData.FirstName);
                     cmd.Parameters.AddWithValue("@LName", userData.LastName);
@@ -70,7 +72,7 @@ namespace EmployeeWorkBook.Models.DL
 
 
 
-        public ApiResponse GetUserData(User_PL userData)
+        public ApiResponse GetUserCredentials(User_PL userData)
         {
             res = new ApiResponse();
             try
@@ -84,6 +86,54 @@ namespace EmployeeWorkBook.Models.DL
                     if (dt !=null && dt.Rows.Count>0)
                     {
                         res.data = dt;
+                        res.successcode = true;
+                        res.msg = "Data Access Successfully.";
+                    }
+                    else
+                    {
+                        res.data = "";
+                        res.successcode = false;
+                        res.msg = "Data Not Found.";
+
+                    }
+                    //cmd.CommandType = CommandType.StoredProcedure;
+                    //cmd.Parameters.AddWithValue("@dkl",dsk)
+                    con.Close();
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                res.data = null;
+                res.msg = ex.Message;
+                res.successcode = false;
+                con.Close();
+            }
+
+            return res;
+
+        }
+
+
+        public ApiResponse GetUserData()
+        {
+            res = new ApiResponse();
+            try
+            {
+                con = DB.GetConnectToDB();
+                using (con)
+                {
+                    //SqlDataAdapter da = new SqlDataAdapter("select * from EmpData where Email='" + userData.Email + "' and EmpPass='" + userData.EmpPass + "'", con);
+                    SqlCommand cmd = new SqlCommand("SaveUser", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Ind",2);
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    if (dt != null && dt.Rows.Count > 0)
+                    {
+                        res.data =  dt;
                         res.successcode = true;
                         res.msg = "Data Access Successfully.";
                     }

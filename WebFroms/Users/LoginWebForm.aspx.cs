@@ -31,7 +31,7 @@ namespace EmployeeWorkBook.WebFroms.Users
             userObj.EmpPass = pass;
           
 
-            ApiResponse res = new UserModel().GetUserData(userObj);
+            ApiResponse res = new UserModel().GetUserCredentials(userObj);
             if (res.successcode)
             {
                 //this.ClientScript.RegisterStartupScript(this.GetType(), "Success", "alert('" + res.msg.Replace("'","") + "')", true);
